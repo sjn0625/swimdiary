@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0f4d92">
+  <title>SwimDiary</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar glass">
+      <div class="brand-wrap">
+        <div class="brand-mark">SD</div>
+        <div>
+          <div class="brand-name">SwimDiary</div>
+          <div class="brand-sub">持续记录训练、反馈与成长的游泳训练系统</div>
+        </div>
+      </div>
+      <button class="ghost-btn" id="accountBtn">账户</button>
+    </header>
+
+    <main class="main-wrap">
+      <section class="hero glass section-block" id="heroSection">
+        <div class="hero-copy">
+          <span class="hero-kicker">周计划优先 · 滚动反馈闭环</span>
+          <h1>把每周计划、反馈与成长，沉淀成真正可持续的训练系统。</h1>
+          <p>
+            SwimDiary 面向爱好者、进阶、备赛和减脂用户，支持分步建档、CSS 测速、滚动周计划、成长可视化、Word / PDF 导出、训练反馈跟踪与减脂营养联动。
+          </p>
+          <div class="hero-actions">
+            <button class="primary-btn" id="startPlannerBtn">开始制定计划</button>
+            <button class="secondary-btn" id="jumpMembershipBtn">查看会员方案</button>
+          </div>
+        </div>
+        <div class="hero-cards">
+          <div class="mini-card">
+            <strong>周计划优先</strong>
+            <span>默认先给本周可执行计划，减少长周期理解负担。</span>
+          </div>
+          <div class="mini-card">
+            <strong>移动端执行模式</strong>
+            <span>今天练什么、练完怎么反馈，在手机上更顺手。</span>
+          </div>
+          <div class="mini-card">
+            <strong>成长看板</strong>
+            <span>持续记录完成率、疲劳、恢复、节奏与成长阶段，让用户看见变化。</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="wizard section-block hidden" id="plannerSection">
+        <div class="wizard-head">
+          <div>
+            <div class="section-eyebrow">规划中心</div>
+            <h2>1 分钟完成建档，先拿到一份真正能执行的计划。</h2>
+          </div>
+          <div class="stepper" id="stepper"></div>
+        </div>
+
+        <div class="step-panel active" data-step="1">
+          <div class="grid cols-2 gap-lg">
+            <div class="panel-card glass">
+              <div class="section-title">先选择你属于哪一类用户</div>
+              <div class="card-grid four-up" id="userGroupGrid"></div>
+            </div>
+            <div class="panel-card glass">
+              <div class="section-title">当前模式说明</div>
+              <div class="muted" id="groupExplanation">先选择用户类型，系统会根据你的身份切换问题、表达方式和计划展示逻辑。</div>
+              <ul class="check-list" id="groupBenefits"></ul>
+              <div class="inline-notice">大多数用户默认以 <strong>本周计划</strong> 为主，只有主动选择时才展开 4 / 6 / 8 周周期。</div>
+            </div>
+          </div>
+          <div class="step-actions">
+            <button class="primary-btn" data-next-step="2">下一步：建档</button>
+          </div>
+        </div>
+
+        <div class="step-panel" data-step="2">
+          <div class="grid cols-2 gap-lg">
+            <div class="panel-card glass form-card">
+              <div class="section-title">基础建档</div>
+              <div class="form-grid">
+                <label><span>昵称</span><input id="display_name" placeholder="比如：小张 / 小白 / 自己的名字"></label>
+                <label><span>目标</span><select id="goal"></select></label>
+                <label><span>水平</span><select id="level"></select></label>
+                <label><span>计划类型</span><select id="plan_scope"></select></label>
+                <label><span>周期长度</span><select id="cycle_length"></select></label>
+                <label><span>每周训练次数</span><input id="sessions_per_week" type="number" min="1" max="7" value="3"></label>
+                <label><span>单次时长（分钟）</span><input id="session_duration" type="number" min="20" max="180" value="45"></label>
+                <label><span>活动水平</span><select id="activity_level"></select></label>
+                <label><span>主项 / 泳姿</span><input id="primary_stroke" placeholder="自由泳 / 蛙泳 / 混合"></label>
+                <label><span>当前不适</span><input id="discomfort" placeholder="没有明显不适 / 肩部紧张 / 腰背疲劳"></label>
+                <label><span>近期有成绩参考吗</span><select id="recent_result_flag">
+                  <option value="无">无</option>
+                  <option value="有">有</option>
+                </select></label>
+                <label><span>成绩距离</span><input id="best_result_distance" placeholder="例如 100 自 / 400 自"></label>
+                <label><span>成绩时间</span><input id="best_result_time" placeholder="例如 1:08 / 5:42"></label>
+                <label><span>手表记录</span><select id="watch_data_flag">
+                  <option value="无">无</option>
+                  <option value="有手表记录">有手表记录</option>
+                </select></label>
+                <label><span>补充说明</span><textarea id="extra_note" rows="3" placeholder="例如：只有晚间可以训练、正在恢复期、希望重点改善呼吸"></textarea></label>
+              </div>
+            </div>
+            <div class="panel-card glass form-card">
+              <div class="section-title">身体信息与 CSS</div>
+              <div class="form-grid">
+                <label><span>性别</span><select id="sex"><option value="">不填写</option><option>男</option><option>女</option></select></label>
+                <label><span>年龄</span><input id="age" type="number" min="8" max="90"></label>
+                <label><span>身高 cm</span><input id="height_cm" type="number" min="100" max="230"></label>
+                <label><span>体重 kg</span><input id="weight_kg" type="number" step="0.1" min="30" max="200"></label>
+                <label><span>体脂 %</span><input id="body_fat" type="number" step="0.1" min="3" max="60"></label>
+                <label><span>CSS 400m</span><input id="css_400" placeholder="4:30 / 4：30 / 270"></label>
+                <label><span>CSS 200m</span><input id="css_200" placeholder="2:00 / 2：00 / 120"></label>
+              </div>
+              <div class="inline-actions">
+                <button class="secondary-btn" id="cssCalcBtn">先算 CSS</button>
+                <div id="cssMessage" class="muted"></div>
+              </div>
+              <div class="inline-notice">系统会兼容全角 / 半角冒号与直接输入秒数，错误提示会区分“未填写”和“格式错误”。</div>
+              <div class="step-actions compact">
+                <button class="secondary-btn" data-prev-step="1">上一步</button>
+                <button class="primary-btn" id="saveProfileBtn">保存建档</button>
+                <button class="primary-btn" id="generatePlanBtn">直接生成计划</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-panel" data-step="3">
+          <div class="panel-card summary-card glass" id="planSummaryCard">
+            <div class="section-title">结果摘要</div>
+            <div id="planEmptyState">先生成计划，这里会出现你的摘要、本周重点和导出入口。</div>
+            <div id="planResultBody" class="hidden">
+              <div id="planSummaryText"></div>
+              <div class="pill-row" id="planMetaPills"></div>
+              <div class="result-actions" id="resultActions">
+                <button class="secondary-btn" id="exportDocBtn">下载 Word</button>
+                <button class="secondary-btn" id="exportPdfBtn">下载 PDF</button>
+                <button class="primary-btn" id="openTodayBtn">进入今天训练页</button>
+                <button class="secondary-btn" id="rolloverPlanBtn">生成下周滚动计划</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid cols-2 gap-lg stack-mobile">
+            <div class="panel-card glass" id="weeklyPlanCard"></div>
+            <div class="panel-card glass" id="rightResultCol">
+              <div id="distributionCard"></div>
+              <div id="guideCard"></div>
+              <div id="cycleCard"></div>
+              <div id="nutritionCard"></div>
+            </div>
+          </div>
+
+          <div class="step-actions">
+            <button class="secondary-btn" data-prev-step="2">返回建档</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard section-block hidden" id="dashboardSection">
+        <div class="section-head">
+          <div>
+            <div class="section-eyebrow">成长系统</div>
+            <h2>持续反馈、滚动周计划和成长可视化都在这里。</h2>
+          </div>
+        </div>
+
+        <div class="mobile-tabs" id="mobileTabs">
+          <button class="tab-btn active" data-tab="today">今日训练</button>
+          <button class="tab-btn" data-tab="feedback">训练反馈</button>
+          <button class="tab-btn" data-tab="progress">成长</button>
+          <button class="tab-btn" data-tab="membership">会员</button>
+        </div>
+
+        <div class="tab-panel active" data-tab-panel="today">
+          <div class="grid cols-2 gap-lg">
+            <div class="panel-card glass" id="todayCard"></div>
+            <div class="panel-card glass" id="historyCard"></div>
+          </div>
+        </div>
+
+        <div class="tab-panel" data-tab-panel="feedback">
+          <div class="grid cols-2 gap-lg stack-mobile">
+            <form class="panel-card glass form-card" id="feedbackForm">
+              <div class="section-title">训练后快速反馈</div>
+              <div class="form-grid">
+                <label><span>对应训练</span><select id="session_index"></select></label>
+                <label><span>完成度</span><select id="completion_status"></select></label>
+                <label><span>疲劳评分（1-10）</span><input id="fatigue_score" type="number" min="1" max="10" value="5"></label>
+                <label><span>睡眠</span><select id="sleep_status"></select></label>
+                <label><span>不适反馈</span><select id="discomfort_feedback"></select></label>
+                <label class="wide"><span>补充备注</span><textarea id="feedback_note" rows="3" placeholder="例如：主训练第 4 组后明显掉速，肩膀有点紧"></textarea></label>
+              </div>
+              <div class="section-subtitle">手表截图辅助判读</div>
+              <div class="inline-notice">第一版采取“截图上传 + 关键指标确认”的稳妥方案，避免直接 OCR 误判后影响计划调整。</div>
+              <div class="form-grid compact">
+                <label class="wide uploader"><span>上传截图</span><input id="screenshot" type="file" accept="image/*"></label>
+                <label><span>实际距离 m</span><input id="actual_distance_m" type="number" min="0"></label>
+                <label><span>实际总时长 s</span><input id="actual_duration_s" type="number" min="0"></label>
+                <label><span>平均配速 /100m s</span><input id="avg_pace_per_100_s" type="number" step="0.1" min="0"></label>
+                <label><span>平均心率</span><input id="avg_hr" type="number" min="0"></label>
+                <label class="wide"><span>手动补充识别文本</span><textarea id="ocr_text" rows="2" placeholder="可粘贴手表 OCR 文字，便于后续升级识别模块"></textarea></label>
+              </div>
+              <div class="step-actions compact">
+                <button type="submit" class="primary-btn">提交反馈</button>
+              </div>
+            </form>
+            <div class="panel-card glass" id="feedbackResultCard">
+              <div class="section-title">系统判断</div>
+              <div class="muted">提交反馈后，这里会显示本次结论、下次建议与周状态更新。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-panel" data-tab-panel="progress">
+          <div class="stats-grid" id="progressStats"></div>
+          <div class="grid cols-2 gap-lg stack-mobile">
+            <div class="panel-card glass">
+              <div class="section-title">完成率、疲劳与距离趋势</div>
+              <div id="trendChartWrap"></div>
+            </div>
+            <div class="panel-card glass" id="growthJourneyCard"></div>
+          </div>
+          <div class="grid cols-2 gap-lg stack-mobile">
+            <div class="panel-card glass">
+              <div class="section-title">最近反馈记录</div>
+              <div id="feedbackHistoryList" class="timeline-list"></div>
+            </div>
+            <div class="panel-card glass" id="rolloverInsightCard"></div>
+          </div>
+        </div>
+
+        <div class="tab-panel" data-tab-panel="membership">
+          <div class="grid cols-2 gap-lg stack-mobile">
+            <div class="panel-card glass" id="pricingCard"></div>
+            <div class="panel-card glass" id="accountCard"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav glass">
+      <button class="nav-btn active" data-go="hero">首页</button>
+      <button class="nav-btn" data-go="planner">计划</button>
+      <button class="nav-btn" data-go="today">执行</button>
+      <button class="nav-btn" data-go="feedback">反馈</button>
+      <button class="nav-btn" data-go="membership">会员</button>
+    </nav>
+  </div>
+
+  <div class="drawer hidden" id="accountDrawer">
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+    <aside class="drawer-panel glass">
+      <div class="drawer-head">
+        <div>
+          <div class="section-eyebrow">账户与同步</div>
+          <h3>登录后可以跨设备保留历史记录</h3>
+        </div>
+        <button class="ghost-btn" id="closeDrawerBtn">关闭</button>
+      </div>
+      <div class="drawer-grid">
+        <div class="panel-card soft">
+          <div class="section-title">当前状态</div>
+          <div id="drawerUserInfo" class="muted"></div>
+        </div>
+        <form class="panel-card soft" id="registerForm">
+          <div class="section-title">把访客数据绑定成正式账号</div>
+          <label><span>昵称</span><input id="register_nickname"></label>
+          <label><span>邮箱</span><input id="register_email" type="email"></label>
+          <label><span>密码</span><input id="register_password" type="password"></label>
+          <button class="primary-btn" type="submit">注册并绑定</button>
+        </form>
+        <form class="panel-card soft" id="loginForm">
+          <div class="section-title">已有账号登录</div>
+          <label><span>邮箱</span><input id="login_email" type="email"></label>
+          <label><span>密码</span><input id="login_password" type="password"></label>
+          <button class="secondary-btn" type="submit">登录</button>
+          <button class="ghost-btn" type="button" id="logoutBtn">退出当前账号</button>
+        </form>
+      </div>
+    </aside>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

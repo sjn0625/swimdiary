@@ -1,0 +1,10 @@
+{
+  "name": "SwimDiary",
+  "short_name": "SwimDiary",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#071420",
+  "theme_color": "#0f4d92",
+  "description": "移动端优先的游泳训练计划与反馈系统",
+  "icons": []
+}
